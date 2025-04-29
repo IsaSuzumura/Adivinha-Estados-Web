@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import capitais from '../data/capitais';
 
 export function Game({ mode, onFinish }) {
-  const [states, setStates] = useState([]);
+  const [, setStates] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -59,6 +59,27 @@ export function Game({ mode, onFinish }) {
     setQuestions(newQuestions);
   }, [generateQuestionText, generateOptions]);
 
+  const handleAnswer = useCallback((isCorrect) => {
+    if (isCorrect) {
+      setScore(prev => prev + 1);
+      setFeedback('Correto!');
+    } else {
+      setFeedback('Errado!');
+    }
+
+    setTimeout(() => {
+      setFeedback(null);
+
+      if (currentQuestion + 1 < questions.length) {
+        setCurrentQuestion(prev => prev + 1);
+        setTimeLeft(15);
+        setInputAnswer('');
+      } else {
+        onFinish(score + (isCorrect ? 1 : 0), questions.length);
+      }
+    }, 1000);
+  }, [currentQuestion, onFinish, questions.length, score]);
+
   useEffect(() => {
     fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
       .then(response => response.json())
@@ -81,28 +102,7 @@ export function Game({ mode, onFinish }) {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [currentQuestion, questions]);
-
-  const handleAnswer = useCallback((isCorrect) => {
-    if (isCorrect) {
-      setScore(prev => prev + 1);
-      setFeedback('Correto!');
-    } else {
-      setFeedback('Errado!');
-    }
-
-    setTimeout(() => {
-      setFeedback(null);
-
-      if (currentQuestion + 1 < questions.length) {
-        setCurrentQuestion(prev => prev + 1);
-        setTimeLeft(15);
-        setInputAnswer('');
-      } else {
-        onFinish(score + (isCorrect ? 1 : 0), questions.length);
-      }
-    }, 1000);
-  }, [currentQuestion, onFinish, questions.length, score]);
+  }, [currentQuestion, questions, handleAnswer]);
 
   const handleSubmit = () => {
     if (feedback) return;
