@@ -33,4 +33,7 @@ Tela final com pontuação
 ![image](https://github.com/user-attachments/assets/b1d7b337-85bb-4ac6-946b-ee8132c467f4)
 
 # Considerações Finais
-Os modos possuem cronômetros e pontuação para deixar o jogo mais divertido. No modo de Capitais, é preciso digitar o nome de cada uma para ganhar pontos. 
+Os modos possuem cronômetros e pontuação para deixar o jogo mais divertido. No modo de Capitais, é preciso digitar o nome de cada uma para ganhar pontos. Além disso, o embaralhador foi feito para escolher aleatoriamente os Estados de forma que não os repitam em cada rodada, limitada em 10 turnos.
+
+# LINK DE ACESSO
+https://adivinhaestados.netlify.app/
