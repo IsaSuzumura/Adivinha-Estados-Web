@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import capitais from '../data/capitais';
 
 export function Game({ mode, onFinish }) {
+  const [states, setStates] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -9,24 +10,14 @@ export function Game({ mode, onFinish }) {
   const [inputAnswer, setInputAnswer] = useState('');
   const [feedback, setFeedback] = useState(null);
 
-  const generateQuestions = useCallback((data) => {
-    const shuffled = [...data].sort(() => 0.5 - Math.random()).slice(0, 10);
-    const newQuestions = shuffled.map(state => ({
-      state,
-      questionText: generateQuestionText(state),
-      answerOptions: generateOptions(state, data),
-    }));
-    setQuestions(newQuestions);
-  }, [mode]);
-
-  const generateQuestionText = (state) => {
+  const generateQuestionText = useCallback((state) => {
     if (mode === 'sigla') return `Qual é a sigla do estado ${state.nome}?`;
     if (mode === 'regiao') return `Qual é a região do estado ${state.nome}?`;
     if (mode === 'capital') return `Qual é a capital do estado ${state.nome}?`;
     return '';
-  };
+  }, [mode]);
 
-  const generateOptions = (correctState, allStates) => {
+  const generateOptions = useCallback((correctState, allStates) => {
     if (mode === 'sigla') {
       const wrongOptions = allStates.filter(s => s.id !== correctState.id)
         .sort(() => 0.5 - Math.random()).slice(0, 3);
@@ -56,7 +47,41 @@ export function Game({ mode, onFinish }) {
     }
 
     return [];
-  };
+  }, [mode]);
+
+  const generateQuestions = useCallback((data) => {
+    const shuffled = [...data].sort(() => 0.5 - Math.random()).slice(0, 10);
+    const newQuestions = shuffled.map(state => ({
+      state,
+      questionText: generateQuestionText(state),
+      answerOptions: generateOptions(state, data),
+    }));
+    setQuestions(newQuestions);
+  }, [generateQuestionText, generateOptions]);
+
+  useEffect(() => {
+    fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+      .then(response => response.json())
+      .then(data => {
+        setStates(data);
+        generateQuestions(data);
+      });
+  }, [mode, generateQuestions]);
+
+  useEffect(() => {
+    if (questions.length > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev === 1) {
+            handleAnswer(false);
+            return 15;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [currentQuestion, questions]);
 
   const handleAnswer = useCallback((isCorrect) => {
     if (isCorrect) {
@@ -78,29 +103,6 @@ export function Game({ mode, onFinish }) {
       }
     }, 1000);
   }, [currentQuestion, onFinish, questions.length, score]);
-
-  useEffect(() => {
-    fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
-      .then(response => response.json())
-      .then(data => {
-        generateQuestions(data);
-      });
-  }, [mode, generateQuestions]);
-
-  useEffect(() => {
-    if (questions.length > 0) {
-      const timer = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev === 1) {
-            handleAnswer(false);
-            return 15;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  }, [currentQuestion, questions, handleAnswer]);
 
   const handleSubmit = () => {
     if (feedback) return;
