@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import capitais from '../data/capitais';
 
 export function Game({ mode, onFinish }) {
-  const [states, setStates] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -10,31 +9,7 @@ export function Game({ mode, onFinish }) {
   const [inputAnswer, setInputAnswer] = useState('');
   const [feedback, setFeedback] = useState(null);
 
-  useEffect(() => {
-    fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
-      .then(response => response.json())
-      .then(data => {
-        setStates(data);
-        generateQuestions(data);
-      });
-  }, [mode]);
-
-  useEffect(() => {
-    if (questions.length > 0) {
-      const timer = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev === 1) {
-            handleAnswer(false);
-            return 15;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  }, [currentQuestion, questions]);
-
-  const generateQuestions = (data) => {
+  const generateQuestions = useCallback((data) => {
     const shuffled = [...data].sort(() => 0.5 - Math.random()).slice(0, 10);
     const newQuestions = shuffled.map(state => ({
       state,
@@ -42,7 +17,7 @@ export function Game({ mode, onFinish }) {
       answerOptions: generateOptions(state, data),
     }));
     setQuestions(newQuestions);
-  };
+  }, [mode]);
 
   const generateQuestionText = (state) => {
     if (mode === 'sigla') return `Qual é a sigla do estado ${state.nome}?`;
@@ -83,7 +58,7 @@ export function Game({ mode, onFinish }) {
     return [];
   };
 
-  const handleAnswer = (isCorrect) => {
+  const handleAnswer = useCallback((isCorrect) => {
     if (isCorrect) {
       setScore(prev => prev + 1);
       setFeedback('Correto!');
@@ -102,7 +77,30 @@ export function Game({ mode, onFinish }) {
         onFinish(score + (isCorrect ? 1 : 0), questions.length);
       }
     }, 1000);
-  };
+  }, [currentQuestion, onFinish, questions.length, score]);
+
+  useEffect(() => {
+    fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
+      .then(response => response.json())
+      .then(data => {
+        generateQuestions(data);
+      });
+  }, [mode, generateQuestions]);
+
+  useEffect(() => {
+    if (questions.length > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev === 1) {
+            handleAnswer(false);
+            return 15;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [currentQuestion, questions, handleAnswer]);
 
   const handleSubmit = () => {
     if (feedback) return;
