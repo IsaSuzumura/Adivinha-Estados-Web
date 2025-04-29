@@ -1,70 +1,36 @@
-# Getting Started with Create React App
+# Adivinhador Web
+Jogo desenvolvido em REACT para teste de memória contendo três modos, adivinhar pelas Iniciais, Regiões ou suas respectivas Capitais. Feito com API do IBGE que contém informações de todos os Estados do Brasil.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Menu Principal
 
-## Available Scripts
+![image](https://github.com/user-attachments/assets/d22016b0-b3d1-4a86-b2a5-3f2de86600f0)
 
-In the project directory, you can run:
+# 1º Modo - Siglas
+Tela de jogo
 
-### `npm start`
+![image](https://github.com/user-attachments/assets/72b2e3a4-8284-4a49-8930-1464e2b2b560)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Tela de final com pontuação
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+![image](https://github.com/user-attachments/assets/eb755c50-416a-4c7d-90f5-aabcc16473d2)
 
-### `npm test`
+# 2º Modo - Regiões
+Tela de jogo
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![image](https://github.com/user-attachments/assets/ddb9e17a-5f9d-428e-bf30-e0bde5bd223a)
 
-### `npm run build`
+Tela final com pontuação
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+![image](https://github.com/user-attachments/assets/cb73a17c-ac00-48d9-b897-eaac7097a4e7)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# 3º Modo - Capitais
+Tela de jogo
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+![image](https://github.com/user-attachments/assets/c7c92c24-8c72-4612-93d5-4bdf63c13ec0)
 
-### `npm run eject`
+Tela final com pontuação
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+![image](https://github.com/user-attachments/assets/b1d7b337-85bb-4ac6-946b-ee8132c467f4)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Considerações Finais
+Os modos possuem cronômetros e pontuação para deixar o jogo mais divertido. No modo de Capitais, é preciso digitar o nome de cada uma para ganhar pontos. 
